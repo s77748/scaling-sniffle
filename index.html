@@ -255,5 +255,13 @@ function handleAcceptConsent() {
 document.getElementById('accept-cookies').addEventListener('click', handleAcceptConsent);
 
 </script>
+    <!-- Create one update function for each consent parameter -->
+<script>
+  function consentGrantedAdStorage() {
+    gtag('consent', 'update', {
+      'ad_storage': 'granted'
+    });
+  }
+</script>
 </body>
 </html>
