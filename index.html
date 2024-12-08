@@ -180,92 +180,66 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </footer>
 
     <script>
-        // Function to dynamically load an HTML file
-        // Function to dynamically load an HTML file
-function loadHTML(file, callback) {
-    const xhr = new XMLHttpRequest();
-    xhr.open('GET', file, true);
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            callback(xhr.responseText);
+        function loadHTML(file, callback) {
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', file, true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    callback(xhr.responseText);
+                }
+            };
+            xhr.send();
         }
-    };
-    xhr.send();
-}
 
-// Load the cookie banner
-loadHTML('cookie-banner.html', function (content) {
-    const container = document.createElement('div');
-    container.innerHTML = content;
-    document.body.appendChild(container);
+        loadHTML('cookie-banner.html', function (content) {
+            const container = document.createElement('div');
+            container.innerHTML = content;
+            document.body.appendChild(container);
 
-    // Show the cookie banner if cookies haven't been accepted or rejected yet
-    if (!localStorage.getItem('cookiesAccepted') && !localStorage.getItem('cookiesRejected')) {
-        document.getElementById('cookie-banner').style.display = 'block';
-    }
+            // Show the cookie banner if cookies haven't been accepted or rejected yet
+            if (!localStorage.getItem('cookiesAccepted') && !localStorage.getItem('cookiesRejected')) {
+                document.getElementById('cookie-banner').style.display = 'block';
+            }
 
-    // Handle "Accept" button
-    document.getElementById('accept-cookies').addEventListener('click', function () {
-        localStorage.setItem('cookiesAccepted', 'true');
-        document.getElementById('cookie-banner').style.display = 'none';
-    });
+            // Handle "Accept" button
+            document.getElementById('accept-cookies').addEventListener('click', function () {
+                localStorage.setItem('cookiesAccepted', 'true');
+                document.getElementById('cookie-banner').style.display = 'none';
+                consentGrantedAdStorage();
+            });
 
-    // Handle "Reject All" button
-    document.getElementById('reject-cookies').addEventListener('click', function () {
-        localStorage.setItem('cookiesRejected', 'true');
-        document.getElementById('cookie-banner').style.display = 'none';
+            // Handle "Reject All" button
+            document.getElementById('reject-cookies').addEventListener('click', function () {
+                localStorage.setItem('cookiesRejected', 'true');
+                document.getElementById('cookie-banner').style.display = 'none';
+                clearCookies();
+            });
 
-        // Optional: Clear cookies if needed
-        clearCookies();
-    });
+            function clearCookies() {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i];
+                    const eqPos = cookie.indexOf('=');
+                    const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+                    document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/';
+                }
+                console.log('Cookies cleared');
+            }
+        });
 
-    // Function to clear all cookies (optional)
-    function clearCookies() {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i];
-            const eqPos = cookie.indexOf('=');
-            const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
-            document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/';
+        // Consent handling function
+        function consentGrantedAdStorage() {
+            gtag('consent', 'update', {
+                'ad_storage': 'granted'
+            });
         }
-        console.log('Cookies cleared');
-    }
-});
+
+        // Attach the event to the "Accept" button
+        document.addEventListener("DOMContentLoaded", function() {
+            document.getElementById('accept-cookies').addEventListener('click', consentGrantedAdStorage);
+        });
 
     </script>
-
-<script>
-    // Function to handle consent acceptance
-function handleAcceptConsent() {
-    // Assume we have a consent management object or API to update consent state
-    const consentState = 'granted';  // This can be sent to a server or stored locally
-
-    // Example: Update the consent state locally in localStorage
-    localStorage.setItem('consentState', consentState);
-
-    // Optionally: Trigger other actions such as enabling tracking scripts
-    // For example, enabling Google Tag Manager or analytics scripts
-    console.log("Consent granted:", consentState);
-
-    // Hide the cookie banner after consent is granted
-    document.getElementById('cookie-banner').style.display = 'none';
-}
-
-// Attach the event to the "Accept" button
-  document.addEventListener("DOMContentLoaded", function() {
-    document.getElementById('accept-cookies').addEventListener('click', consentGrantedAdStorage);
-  });
-
-</script>
-    
-<!-- Create one update function for each consent parameter --> 
-<script>
-  function consentGrantedAdStorage() {
-    gtag('consent', 'update', {
-      'ad_storage': 'granted'
-    });
-  }
-</script>
     
 </body>
 </html>
