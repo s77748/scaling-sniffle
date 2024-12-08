@@ -252,7 +252,9 @@ function handleAcceptConsent() {
 }
 
 // Attach the event to the "Accept" button
-document.getElementById('accept-cookies').addEventListener('click', handleAcceptConsent);
+  document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById('accept-cookies').addEventListener('click', consentGrantedAdStorage);
+  });
 
 </script>
     
