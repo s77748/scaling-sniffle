@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DevHub Solutions</title>
     <style>
+        /* Existing styles from earlier example */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -69,6 +70,40 @@
                 width: 100%;
             }
         }
+
+        /* Cookie banner styles */
+        #cookie-banner {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 15px 20px;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            display: none;
+        }
+
+        #cookie-banner a {
+            color: #4CAF50;
+            text-decoration: underline;
+        }
+
+        #cookie-banner button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin-left: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #cookie-banner button:hover {
+            background-color: #45a049;
+        }
     </style>
 </head>
 <body>
@@ -117,5 +152,37 @@
     <footer>
         <p>&copy; 2024 DevHub Solutions. All rights reserved.</p>
     </footer>
+
+    <script>
+        // Function to dynamically load an HTML file
+        function loadHTML(file, callback) {
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', file, true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    callback(xhr.responseText);
+                }
+            };
+            xhr.send();
+        }
+
+        // Load the cookie banner
+        loadHTML('cookie-banner.html', function(content) {
+            const container = document.createElement('div');
+            container.innerHTML = content;
+            document.body.appendChild(container);
+
+            // Show the cookie banner if cookies haven't been accepted yet
+            if (!localStorage.getItem('cookiesAccepted')) {
+                document.getElementById('cookie-banner').style.display = 'block';
+            }
+
+            // Add click event to accept button
+            document.getElementById('accept-cookies').addEventListener('click', function() {
+                localStorage.setItem('cookiesAccepted', 'true');
+                document.getElementById('cookie-banner').style.display = 'none';
+            });
+        });
+    </script>
 </body>
 </html>
