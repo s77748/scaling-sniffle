@@ -178,7 +178,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <footer>
         <p>&copy; 2024 DevHub Solutions. All rights reserved.</p>
     </footer>
-
+        
     <script>
         function loadHTML(file, callback) {
             const xhr = new XMLHttpRequest();
@@ -201,19 +201,23 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 document.getElementById('cookie-banner').style.display = 'block';
             }
 
-            // Handle "Accept" button
-            document.getElementById('accept-cookies').addEventListener('click', function () {
-                localStorage.setItem('cookiesAccepted', 'true');
-                document.getElementById('cookie-banner').style.display = 'none';
-                consentGrantedAdStorage();
-            });
+            const acceptButton = document.getElementById('accept-cookies');
+            if (acceptButton) {
+                acceptButton.addEventListener('click', function () {
+                    localStorage.setItem('cookiesAccepted', 'true');
+                    document.getElementById('cookie-banner').style.display = 'none';
+                    consentGrantedAdStorage();
+                });
+            }
 
-            // Handle "Reject All" button
-            document.getElementById('reject-cookies').addEventListener('click', function () {
-                localStorage.setItem('cookiesRejected', 'true');
-                document.getElementById('cookie-banner').style.display = 'none';
-                clearCookies();
-            });
+            const rejectButton = document.getElementById('reject-cookies');
+            if (rejectButton) {
+                rejectButton.addEventListener('click', function () {
+                    localStorage.setItem('cookiesRejected', 'true');
+                    document.getElementById('cookie-banner').style.display = 'none';
+                    clearCookies();
+                });
+            }
 
             function clearCookies() {
                 const cookies = document.cookie.split(';');
@@ -233,13 +237,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 'ad_storage': 'granted'
             });
         }
-
-        // Attach the event to the "Accept" button
-        document.addEventListener("DOMContentLoaded", function() {
-            document.getElementById('accept-cookies').addEventListener('click', consentGrantedAdStorage);
-        });
-
-    </script>
+        </script>
     
 </body>
 </html>
