@@ -235,5 +235,27 @@ loadHTML('cookie-banner.html', function (content) {
 });
 
     </script>
+
+<script>
+    // Function to handle consent acceptance
+function handleAcceptConsent() {
+    // Assume we have a consent management object or API to update consent state
+    const consentState = 'granted';  // This can be sent to a server or stored locally
+
+    // Example: Update the consent state locally in localStorage
+    localStorage.setItem('consentState', consentState);
+
+    // Optionally: Trigger other actions such as enabling tracking scripts
+    // For example, enabling Google Tag Manager or analytics scripts
+    console.log("Consent granted:", consentState);
+
+    // Hide the cookie banner after consent is granted
+    document.getElementById('cookie-banner').style.display = 'none';
+}
+
+// Attach the event to the "Accept" button
+document.getElementById('accept-cookies').addEventListener('click', handleAcceptConsent);
+
+</script>
 </body>
 </html>
